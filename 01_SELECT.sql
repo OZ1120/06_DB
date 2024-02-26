@@ -35,7 +35,7 @@
 
 -- asterisk(*) : 모든, 포함하다를 나타내는 기호
 SELECT *
-FROM EMPLOYEE;
+FROM EMPLOYEE; 
 
 
 
