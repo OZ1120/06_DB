@@ -540,7 +540,7 @@ ORDER BY DEPT_CODE; -- ASC 생략 가능 (기본 값이다!!!)
 
 -- EMPLOYEE 테이블에서
 -- 급여가 300만 이상, 600만 이하인 사원의
--- 사번, 이름, 급여를 이름 내일차순으로 조회
+-- 사번, 이름, 급여를 이름 내림차순으로 조회
 SELECT EMP_ID, EMP_NAME, SALARY
 FROM EMPLOYEE
 WHERE SALARY BETEWEEN 3000000 AND 6000000
