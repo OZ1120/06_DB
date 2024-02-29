@@ -117,9 +117,11 @@ WHERE COACH_PROFESSOR_NO IS NULL ;
 -- 학번이 A112113인 김고운 학생의 년도 별 평점을 구하는 SQL문을 작성하시오.
 -- 단, 이때 출력화면의 헤더는 "년도", "년도 별 평점"이라고 찍히게 하고,
 -- 점수는 반올림하여 소수점 이하 한자리까지만 표시한다.
-SELECT *
+SELECT  SUBSTR(TERM_NO,1,4) 년도 ,AVG(POINT) "년도 별 평점"
 FROM TB_GRADE
-WHERE STUDENT_NO = 'A112113';
+WHERE STUDENT_NO = 'A112113'
+GROUP BY SUBSTR(TERM_NO,1,4)
+ORDER BY SUBSTR(TERM_NO,1,4);
 
 
 
