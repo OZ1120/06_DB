@@ -341,12 +341,23 @@ AND "내가 나중에 사용자가 가입한 날짜를 표시해줄 이름을 �
 
 
 --18: TB_MEMBER 테이블에서 등급이 '특별회원'이면서 가장 오래된 회원의 아이디를 조회하
-FROM TB_MEMBER 
---19: TB_MEMBER 테이블에서 등급이 '우수회원'이면서 이름이 '신사임당'이 아닌 회원의 수를 조회
-FROM TB_MEMBER 
---20: TB_MEMBER 테이블에서 등급이 '일반회원'이면서 지역이 '서울'인 회원의 이름과 등급을 조회 단, 결과를 등급에 따라 내림차순으로 정렬
+FROM TB_MEMBER ;
 
+
+--19: TB_MEMBER 테이블에서 등급이 '우수회원'이면서 이름이 '신사임당'이 아닌 회원의 수를 조회
+FROM TB_MEMBER ;
+
+
+--20: TB_MEMBER 테이블에서 등급이 '일반회원'이면서 
+--지역이 '서울'인 회원의 이름과 등급을 조회 
+--단, 결과를 등급에 따라 내림차순으로 정렬
+
+SELECT MEMBER_NAME, GRADE
 FROM TB_MEMBER 
+WHERE GRADE = '10'
+AND AREA_CODE = '02'
+ORDER BY GRADE DESC;
+-- 오름차순 : ASC / 내림차순 : DESC
 
 
 
