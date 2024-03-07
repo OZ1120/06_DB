@@ -128,7 +128,12 @@ FROM EMPLOYEE2;
 
 -- * 조건절을 설정하지 않고 UPDATE 구문 실행 시 모든 행의 컬럼 값 변경.
 
+UPDATE DEPARTMENT2 
+SET DEPT_TITLE = '인사팀'; -- 9행
 
+SELECT * FROM DEPARTMENT2 ;
+
+ROLLBACK;
 
 
 ---------------------------------------
@@ -138,7 +143,14 @@ FROM EMPLOYEE2;
 -- * 여러 컬럼을 한번에 수정할 시 콤마(,)로 컬럼을 구분하면됨.
 -- D9 / 전략기획팀  -> D0 / 전략기획2팀으로 수정
 
+UPDATE DEPARTMENT2 
+SET DEPT_ID = 'D0', 
+		DEPT_TITLE ='전략기획2팀'
+WHERE DEPT_ID ='D9';
 
+SELECT * FROM DEPARTMENT2;
+
+ROLLBACK;
 
 ---------------------------------------
 
@@ -153,6 +165,16 @@ FROM EMPLOYEE2;
 -- 급여와 보너스율을 유재식 사원과 동일하게 변경해 주기로 했다.
 -- 이를 반영하는 UPDATE문을 작성하시오.
 
+UPDATE EMPLOYEE2 
+SET SALARY = (SELECT SALARY FROM EMPLOYEE2 WHERE EMP_NAME='유재식'),
+		BONUS = (SELECT BONUS FROM EMPLOYEE2 WHERE EMP_NAME='유재식')
+WHERE EMP_NAME = '방명수';
+
+SELECT EMP_NAME, SALARY , BONUS 
+FROM EMPLOYEE2
+WHERE EMP_NAME IN ('유재식','방명수');
+
+ROLLBACK;
    
 ---------------------------------------
 
@@ -165,19 +187,47 @@ FROM EMPLOYEE2;
 -- 노옹철, 전형돈, 정중하, 하동운 사원의 급여와 보너스를
 -- 유재식 사원의 급여와 보너스와 같게 변경하는 UPDATE문을 작성하시오.
 
+UPDATE EMPLOYEE2 
+SET (SALARY,BONUS) 
+	= (SELECT SALARY,BONUS FROM EMPLOYEE2 WHERE EMP_NAME='유재식')
+WHERE EMP_NAME IN ('노옹철','전형돈','정중하','하동운');
+
+SELECT EMP_NAME , SALARY , BONUS 
+FROM EMPLOYEE2 
+WHERE EMP_NAME IN ('노옹철','전형돈','정중하','하동운');
+
+ROLLBACK;
 
 
-
-
-
--- EMP_SALARY테이블에서 아시아지역에 근무하는 직원의 보너스를 0.3으로 변경
+-- EMPLOYEE2 테이블에서 아시아지역에 근무하는 직원의 보너스를 0.3으로 변경
 
 
 -- 1) 아시아 지역에 근무하는 직원
+SELECT EMP_ID , DEPT_TITLE , LOCAL_NAME
+FROM EMPLOYEE2 
+JOIN DEPARTMENT2 ON (DEPT_CODE = DEPT_ID)
+JOIN LOCATION ON (LOCATION_ID = LOCAL_CODE)
+WHERE LOCAL_NAME LIKE 'ASIA%'; -- 18행
 
 
 -- 2) 아시아 지역 근무 직원 보너스 0.3으로 변경
+UPDATE EMPLOYEE2 
+SET BONUS = 0.3
+WHERE EMP_ID IN (
+	SELECT EMP_ID 
+	FROM EMPLOYEE2 
+	JOIN DEPARTMENT2 ON (DEPT_CODE = DEPT_ID)
+	JOIN LOCATION ON (LOCATION_ID = LOCAL_CODE)
+	WHERE LOCAL_NAME LIKE 'ASIA%'
+); -- 18행 수정
 
+SELECT EMP_ID , EMP_NAME, BONUS
+FROM EMPLOYEE2 
+JOIN DEPARTMENT2 ON (DEPT_CODE = DEPT_ID)
+JOIN LOCATION ON (LOCATION_ID = LOCAL_CODE)
+WHERE LOCAL_NAME LIKE 'ASIA%'; 
+
+ROLLBACK;
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -188,11 +238,11 @@ FROM EMPLOYEE2;
 -- 조건의 값이 없으면 INSERT됨
 
 CREATE TABLE EMP_M01
-AS SELECT * FROM EMPLOYEE;
+AS SELECT * FROM EMPLOYEE; -- 23행
 
 CREATE TABLE EMP_M02
 AS SELECT * FROM EMPLOYEE
-   WHERE JOB_CODE = 'J4';
+   WHERE JOB_CODE = 'J4'; -- 4행
    
 INSERT INTO EMP_M02
 VALUES (999, '곽두원', '561016-1234567', 'kwack_dw@kh.or.kr',
@@ -206,6 +256,7 @@ UPDATE EMP_M02 SET SALARY = 0;
 
 SELECT * FROM EMP_M02;
 
+-- INTO컬럼에 USING컬럼 합치기 (2번을 1번에 덧씌우기)
 MERGE INTO EMP_M01 USING EMP_M02 ON(EMP_M01.EMP_ID = EMP_M02.EMP_ID)
 WHEN MATCHED THEN
 UPDATE SET
@@ -241,15 +292,37 @@ SELECT * FROM EMP_M01;
 -- DELTE FROM 테이블명 WHERE 조건설정
 -- 만약 WHERE 조건을 설정하지 않으면 모든 행이 다 삭제됨
 
+
+INSERT INTO EMPLOYEE2 
+VALUES(900, '장채현', '901123-2345678', 
+			'jang_ch@kh.or.kr', '01012341234',
+			'D1', 'J7', 'S3', 4300000, 
+			0.2, 200, SYSDATE, NULL, 'N');
+
 COMMIT;
 
 -- EMPLOYEE2 테이블에서 '장채현'사원 정보 조회
 
+SELECT * FROM EMPLOYEE2 
+WHERE EMP_NAME ='장채현';
+
+
+
 -- EMPLOYEE2 테이블에서 이름이 '장채현'인 사원 정보 삭제
+DELETE FROM EMPLOYEE2 
+WHERE EMP_NAME ='장채현';
 
 -- 삭제 확인
+SELECT * FROM EMPLOYEE2 
+WHERE EMP_NAME ='장채현'; -- 결과 없음
 
 -- EMPLOYEE2 테이블 전체 삭제
+-- (WHERE절 없이 작성!)
+DELETE FROM EMPLOYEE2; -- 23행 삭제
+
+SELECT * FROM EMPLOYEE2;
+
+ROLLBACK;
 
 
 ---------------------------------------------------------------------------------------------
@@ -287,3 +360,4 @@ SELECT * FROM EMPLOYEE3;
 ROLLBACK;
 -- 롤백 후 복구 확인 -> 복구 안됨을 확인!
 SELECT * FROM EMPLOYEE3;
+
