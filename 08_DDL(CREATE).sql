@@ -81,6 +81,7 @@ SELECT * FROM USER_TABLES;
 -- 가입일   : ENROLL_DATE  / 자료형 : DATE
 
 
+				-- "" 안써도 테이블명으로 인식하긴함
 CREATE TABLE "MEMBER"(
 	MEMBER_ID   VARCHAR2(20),
 	MEMBER_PW   VARCHAR2(20),
@@ -89,7 +90,7 @@ CREATE TABLE "MEMBER"(
 	ENROLL_DATE DATE DEFAULT SYSDATE -- 현재 시간을 기본 값으로 지정
 );
 
--- DEFAULT(==기본값) : 컬럼의 기본 값 지정 (필수 아님!)
+-- DEFAULT(=기본값) : 컬럼의 기본 값 지정 (필수 아님!)
  --> INSERT, UPDATE 시 해당 컬럼에 값을 넣지 않으면
  -- 지정한 기본 값이 들어간다
 
@@ -118,6 +119,7 @@ SELECT * FROM USER_TABLES;
 
 -- DESC문 : 테이블의 구조를 표시
 DESC MEMBER;
+-- CMD 에서 가능
 
 
 -- MEMBER 테이블에 샘플 데이터 삽입
