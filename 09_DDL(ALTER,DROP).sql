@@ -244,6 +244,9 @@ CREATE TABLE TB2(
 -- 일반 삭제(DEPT_COPY)
 DROP TABLE DEPT_COPY; -- Table DEPT_COPY이(가) 삭제되었습니다.
 
+SELECT * FROM DEPT_COPY;
+-- ORA-00942: 테이블 또는 뷰가 존재하지 않습니다
+
 
 -- ** 관계가 형성된 테이블 중 부모테이블(TB1) 삭제 **
 DROP TABLE TB1;
@@ -283,7 +286,7 @@ ALTER TABLE DEPT_COPY RENAME CONSTRAINT PK_DCOPY TO DEPT_COPY_PK;
 -- 3) 테이블명 변경 : ALTER TABLE 테이블명 RENAME TO 변경명;
 ALTER TABLE DEPT_COPY RENAME TO DCOPY;
 SELECT * FROM DCOPY;
-SELECT * FROM DEPT_COPY; -- 이름이 변경되어 DEPT_COPY 테이블명으로 조회 불가
+SELECT * FROM DEPT_COPY ; -- 이름이 변경되어 DEPT_COPY 테이블명으로 조회 불가
 
 
 
